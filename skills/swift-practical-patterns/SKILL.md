@@ -1,6 +1,6 @@
 ---
 name: swift-practical-patterns
-description: Implement or diagnose SwiftUI background app refresh, seeded duplicates in SwiftData CloudKit sync, Core Spotlight search, in-app Translation framework flows, awaited cleanup with Swift 6.4 async defer, task naming and name-inspection availability, synchronous caches with Mutex and independent Atomic counters, custom FormatStyle interpolation in plain Swift strings, inline SF Symbols in localized SwiftUI Text, struct memberwise initializer access and Swift 6.4 private-storage migration, optional opaque/existential type syntax and inference, protocol requirement versus extension method selection, type-directed macro diagnostics and inferred field-type projections, system container margins and UIKit layoutMarginsGuide, or iPhone Duo ArrangementView split sizing, sheet placement, and custom vertical toolbar legibility. Use for lifecycle, identity, cancellation, language assets, formatting, initialization, type syntax, layout constraints, and validation decisions.
+description: "Implement or diagnose focused Swift and SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; FormatStyle interpolation and inline symbols; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; system content margins; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use alongside broader Swift/SwiftUI skills when these scenarios need specific API, availability, lifecycle, identity, cancellation, or validation decisions."
 license: MIT
 metadata:
   version: "0.1.0"
@@ -8,7 +8,7 @@ metadata:
 
 # Swift Practical Patterns
 
-Use focused guidance for Swift app integrations, asynchronous cleanup, synchronous shared state, task diagnostics, string formatting, struct initialization, type syntax, protocol dispatch, macro expansion, and adaptive layout decisions.
+Use focused guidance for Swift app integrations, asynchronous cleanup, synchronous shared state, task diagnostics, string formatting, struct initialization, type syntax, protocol dispatch, macro expansion, non-View composition, and adaptive layout decisions.
 
 ## Apply the guidance
 
@@ -30,6 +30,7 @@ Use focused guidance for Swift app integrations, asynchronous cleanup, synchrono
 - Synthesized struct memberwise initializers, Swift 6.4 private initialized storage, inaccessible initializers, or extension initializer conflicts: read [memberwise-initializers.md](references/memberwise-initializers.md).
 - Protocol extension calls that bypass a concrete implementation, requirement defaults, or dispatch semantics versus optimization: read [protocol-dispatch.md](references/protocol-dispatch.md).
 - Macro constraint diagnostics selected through overloads, omitted field annotations in generated signatures, or associated-type witness limits: read [macro-type-information.md](references/macro-type-information.md).
+- Non-View ContentBuilder DSLs, TupleContent conformances, app-local ordered rules, multi-value back-deployment, or deciding when to own the builder: read [content-builder-dsls.md](references/content-builder-dsls.md).
 - Optional some/any types, some View?, protocol-composition parentheses, or opaque-result nil inference: read [optional-protocol-types.md](references/optional-protocol-types.md).
 - System container margins, ContentMarginGuide, contentMargins(for:), carousel content insets, or UIKit layoutMarginsGuide: read [layout-margins.md](references/layout-margins.md).
 - ArrangementView ratio/point/ideal-size allocation, sheet placement and bar direction, or custom vertical toolbar legibility on iPhone Duo: read the matching section of [duo-layout-details.md](references/duo-layout-details.md).
