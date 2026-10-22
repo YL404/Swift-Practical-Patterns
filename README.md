@@ -7,7 +7,7 @@ This skill offers focused guidance and works well alongside other community-main
 ## What's included
 
 - App integrations: background refresh, SwiftData and CloudKit identity, Core Spotlight, and in-app translation.
-- Swift patterns: asynchronous cleanup, string formatting, memberwise initialization, and optional protocol types.
+- Swift patterns: asynchronous cleanup, string formatting, memberwise initialization, optional protocol types, and protocol method selection.
 - SwiftUI details: localized inline symbols, system margins, and adaptive layout and presentation.
 
 See the [skill's task routing](skills/swift-practical-patterns/SKILL.md#task-routing) for individual references.
