@@ -2,6 +2,8 @@
 name: swift-practical-patterns
 description: Implement or diagnose SwiftUI background app refresh, seeded duplicates in SwiftData CloudKit sync, Core Spotlight search, in-app Translation framework flows, awaited cleanup with Swift 6.4 async defer, custom FormatStyle interpolation in plain Swift strings, inline SF Symbols in localized SwiftUI Text, struct memberwise initializer access and Swift 6.4 private-storage migration, optional opaque/existential type syntax and inference, system container margins and UIKit layoutMarginsGuide, or iPhone Duo ArrangementView split sizing, sheet placement, and custom vertical toolbar legibility. Use for lifecycle, identity, cancellation, language assets, formatting, initialization, type syntax, layout constraints, and validation decisions.
 license: MIT
+metadata:
+  version: "0.1.0"
 ---
 
 # Swift Practical Patterns

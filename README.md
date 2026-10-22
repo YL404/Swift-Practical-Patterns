@@ -14,7 +14,15 @@ See the [skill's task routing](skills/swift-practical-patterns/SKILL.md#task-rou
 
 ## Installation
 
-Install the `skills/swift-practical-patterns/` folder in your coding agent's skills directory, following your agent's installation instructions. The folder is self-contained and uses the [Agent Skills format](https://agentskills.io/specification).
+With Node.js 22.20 or later, run this from your app project:
+
+```sh
+npx skills add https://github.com/YL404/Swift-Practical-Patterns --skill swift-practical-patterns
+```
+
+Choose your coding agent when prompted. Add `--global` to install across projects.
+
+You can also install the `skills/swift-practical-patterns/` folder manually, following your agent's installation instructions. The folder is self-contained and uses the [Agent Skills format](https://agentskills.io/specification).
 
 ## Usage
 
