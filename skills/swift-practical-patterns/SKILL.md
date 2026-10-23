@@ -1,6 +1,6 @@
 ---
 name: swift-practical-patterns
-description: "Implement or diagnose focused Swift and SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; FormatStyle interpolation and inline symbols; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; custom animation timing, phase feedback, and TimelineView cadence; container-relative sizing, geometry breakpoints, and system content margins; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use alongside broader Swift/SwiftUI skills when these scenarios need specific API, availability, lifecycle, identity, cancellation, or validation decisions."
+description: "Implement or diagnose focused Swift and SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; Observation assignment and mutation; FormatStyle interpolation and inline symbols; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; custom animation timing, phase feedback, and TimelineView cadence; container-relative sizing, geometry breakpoints, and system content margins; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use alongside broader Swift/SwiftUI skills when these scenarios need specific API, availability, lifecycle, identity, cancellation, or validation decisions."
 license: MIT
 metadata:
   version: "0.1.0"
@@ -8,7 +8,7 @@ metadata:
 
 # Swift Practical Patterns
 
-Use focused guidance for Swift app integrations, asynchronous cleanup, synchronous shared state, task diagnostics, string formatting, struct initialization, type syntax, protocol dispatch, macro expansion, non-View composition, animation control, and adaptive layout decisions.
+Use focused guidance for Swift app integrations, asynchronous cleanup, synchronous shared state, Observation mutation boundaries, task diagnostics, string formatting, struct initialization, type syntax, protocol dispatch, macro expansion, non-View composition, animation control, and adaptive layout decisions.
 
 ## Apply the guidance
 
@@ -25,6 +25,7 @@ Use focused guidance for Swift app integrations, asynchronous cleanup, synchrono
 - Awaited resource cleanup, asynchronous test teardown, Swift 6.4 defer bodies with await, or cleanup cancellation/error boundaries: read [async-cleanup.md](references/async-cleanup.md).
 - Task diagnostic names, static versus retained-handle name access, SwiftUI .task(id:name:), or naming fallbacks on older runtimes: read [task-names.md](references/task-names.md).
 - Synchronous shared caches, indivisible check-and-insert operations, recursive Mutex acquisition, or independent atomic counters and relaxed-ordering limits: read [synchronous-shared-state.md](references/synchronous-shared-state.md).
+- Equal snapshots that still notify, no-op in-place collection edits, or Observation notification versus didSet behavior: read [observation-mutations.md](references/observation-mutations.md).
 - Custom FormatStyle interpolation in plain String literals, generic input/output constraints, or choosing between a formatting extension and localized interpolation: read [string-interpolation.md](references/string-interpolation.md).
 - Inline SF Symbols inside a sentence, LocalizedStringKey image interpolation, or styling an interpolated symbol while preserving Image/Text types: read [inline-symbols.md](references/inline-symbols.md).
 - Synthesized struct memberwise initializers, Swift 6.4 private initialized storage, inaccessible initializers, or extension initializer conflicts: read [memberwise-initializers.md](references/memberwise-initializers.md).
