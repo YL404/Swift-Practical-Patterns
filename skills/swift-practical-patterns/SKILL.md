@@ -1,6 +1,6 @@
 ---
 name: swift-practical-patterns
-description: "Implement or diagnose focused Swift and SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; Observation assignment and mutation; FormatStyle interpolation and inline symbols; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; custom animation timing, phase feedback, and TimelineView cadence; container-relative sizing, geometry breakpoints, and system content margins; scroll anchors and position readback; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use alongside broader Swift/SwiftUI skills when these scenarios need specific API, availability, lifecycle, identity, cancellation, or validation decisions."
+description: "Implement or diagnose focused Swift and SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; Observation assignment and mutation; FormatStyle interpolation, inline symbols, and semantic attributed text; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; custom animation timing, phase feedback, and TimelineView cadence; container-relative sizing, geometry breakpoints, and system content margins; scroll anchors and position readback; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use alongside broader Swift/SwiftUI skills when these scenarios need specific API, availability, lifecycle, identity, cancellation, or validation decisions."
 license: MIT
 metadata:
   version: "0.1.0"
@@ -8,7 +8,7 @@ metadata:
 
 # Swift Practical Patterns
 
-Use focused guidance for Swift app integrations, asynchronous cleanup, synchronous shared state, Observation mutation boundaries, task diagnostics, string formatting, struct initialization, type syntax, protocol dispatch, macro expansion, non-View composition, animation control, scroll-position decisions, and adaptive layout decisions.
+Use focused guidance for Swift app integrations, asynchronous cleanup, synchronous shared state, Observation mutation boundaries, task diagnostics, string and attributed-text formatting, struct initialization, type syntax, protocol dispatch, macro expansion, non-View composition, animation control, scroll-position decisions, and adaptive layout decisions.
 
 ## Apply the guidance
 
@@ -28,6 +28,7 @@ Use focused guidance for Swift app integrations, asynchronous cleanup, synchrono
 - Equal snapshots that still notify, no-op in-place collection edits, or Observation notification versus didSet behavior: read [observation-mutations.md](references/observation-mutations.md).
 - Custom FormatStyle interpolation in plain String literals, generic input/output constraints, or choosing between a formatting extension and localized interpolation: read [string-interpolation.md](references/string-interpolation.md).
 - Inline SF Symbols inside a sentence, LocalizedStringKey image interpolation, or styling an interpolated symbol while preserving Image/Text types: read [inline-symbols.md](references/inline-symbols.md).
+- Semantic measurement-unit fonts, custom Markdown attribute decoding and rendering mappings, or attributed-text link policies and in-app browser preferences: read [attributed-text.md](references/attributed-text.md).
 - Synthesized struct memberwise initializers, Swift 6.4 private initialized storage, inaccessible initializers, or extension initializer conflicts: read [memberwise-initializers.md](references/memberwise-initializers.md).
 - Protocol extension calls that bypass a concrete implementation, requirement defaults, or dispatch semantics versus optimization: read [protocol-dispatch.md](references/protocol-dispatch.md).
 - Macro constraint diagnostics selected through overloads, omitted field annotations in generated signatures, or associated-type witness limits: read [macro-type-information.md](references/macro-type-information.md).
