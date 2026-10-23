@@ -1,6 +1,6 @@
 ---
 name: swift-practical-patterns
-description: "Swift/SwiftUI patterns: background refresh; notification audio; SwiftData/CloudKit seeded duplicates/fetch shape; sheet dismissal; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex/Atomic state; shared in-flight loads; async and throwing getters; Observable state initialization, writes, and onChange captures; FormatStyle interpolation, inline symbols, symbol rendering/effects, attributed text, and line height; map cameras, bounds, and overlays; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; animation timing, phase feedback, and TimelineView cadence; container sizing, geometry breakpoints, and content margins; scroll anchors and position readback; chart dimming; shaders; PDF assets; button shapes and concentric corners; nested alignment guides, geometry/compositing boundaries, and blend cutouts; macOS toolbars; and iPhone Duo layouts. Use with broader Swift/SwiftUI skills."
+description: "Swift/SwiftUI patterns: background refresh; notification audio; SwiftData/CloudKit seeded duplicates/fetch shape; sheet dismissal; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex/Atomic state; shared in-flight loads; async and throwing getters; Observable state initialization, writes, and onChange captures; FormatStyle interpolation, inline symbols, symbol rendering/effects, attributed text, and line height; map cameras, bounds, and overlays; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; animation timing, phase feedback, and TimelineView cadence; container sizing, geometry breakpoints, and content margins; scroll anchors and position readback; chart dimming; shaders; PDF assets; button shapes and concentric corners; nested alignment guides, geometry/compositing boundaries, and blend cutouts; macOS toolbars; iPhone Duo layouts; preview arguments and partial generation."
 license: MIT
 metadata:
   version: "0.2.0"
@@ -8,7 +8,7 @@ metadata:
 
 # Swift Practical Patterns
 
-Use focused guidance for Swift app integrations, downloaded notification audio and alarm boundaries, sheet dismissal policies, persistence fetch shape, asynchronous cleanup, synchronous shared state, shared async loads, effectful getters, Observable construction and mutation boundaries, onChange capture semantics, task diagnostics, string and attributed-text formatting, paragraph line height, map cameras and geographic overlays, struct initialization, type syntax, protocol dispatch, symbol effects, chart dimming, Metal shader binding, PDF asset scaling, macro expansion, non-View composition, animation control, scroll-position decisions, nested alignment, rendering boundaries, system button shapes, concentric corners, macOS toolbar appearance, and adaptive layout decisions.
+Use this guidance alongside broader Swift/SwiftUI skills for preview input catalogs, offline partial-generation fixtures, Swift app integrations, downloaded notification audio and alarm boundaries, sheet dismissal policies, persistence fetch shape, asynchronous cleanup, synchronous shared state, shared async loads, effectful getters, Observable construction and mutation boundaries, onChange capture semantics, task diagnostics, string and attributed-text formatting, paragraph line height, map cameras and geographic overlays, struct initialization, type syntax, protocol dispatch, symbol effects, chart dimming, Metal shader binding, PDF asset scaling, macro expansion, non-View composition, animation control, scroll-position decisions, nested alignment, rendering boundaries, system button shapes, concentric corners, macOS toolbar appearance, and adaptive layout decisions.
 
 ## Apply the guidance
 
@@ -18,6 +18,7 @@ Use focused guidance for Swift app integrations, downloaded notification audio a
 
 ## Task routing
 
+- Xcode 27 preview argument groups and their deployment/runtime requirements, or offline Foundation Models PartiallyGenerated fixtures: read [preview-state-fixtures.md](references/preview-state-fixtures.md).
 - SwiftUI background content refresh, BGAppRefreshTaskRequest, scene registration, request replacement, or cancellation: read [background-refresh.md](references/background-refresh.md).
 - Audio downloaded by notification service extensions, App Group sound lookup, expiry completion, or choosing UserNotifications versus AlarmKit: read [notification-service-audio.md](references/notification-service-audio.md).
 - Seeded duplicates, business and record identity, duplicate diagnosis, or reconciliation decisions in SwiftData automatic CloudKit sync: read [swiftdata-sync.md](references/swiftdata-sync.md).
