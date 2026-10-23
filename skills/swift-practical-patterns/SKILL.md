@@ -1,6 +1,6 @@
 ---
 name: swift-practical-patterns
-description: "Implement or diagnose focused Swift and SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; FormatStyle interpolation and inline symbols; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; custom animation timing, phase feedback, and TimelineView cadence; system content margins; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use alongside broader Swift/SwiftUI skills when these scenarios need specific API, availability, lifecycle, identity, cancellation, or validation decisions."
+description: "Implement or diagnose focused Swift and SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; FormatStyle interpolation and inline symbols; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; custom animation timing, phase feedback, and TimelineView cadence; container-relative sizing, geometry breakpoints, and system content margins; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use alongside broader Swift/SwiftUI skills when these scenarios need specific API, availability, lifecycle, identity, cancellation, or validation decisions."
 license: MIT
 metadata:
   version: "0.1.0"
@@ -33,5 +33,6 @@ Use focused guidance for Swift app integrations, asynchronous cleanup, synchrono
 - Non-View ContentBuilder DSLs, TupleContent conformances, app-local ordered rules, multi-value back-deployment, or deciding when to own the builder: read [content-builder-dsls.md](references/content-builder-dsls.md).
 - Optional some/any types, some View?, protocol-composition parentheses, or opaque-result nil inference: read [optional-protocol-types.md](references/optional-protocol-types.md).
 - CustomAnimation completion/merging, spring duration versus completion criteria, phase reset and event feedback, or TimelineView schedules/cadence: read [animation-control.md](references/animation-control.md).
+- Sizing cards with containerRelativeFrame, count/span spacing, onGeometryChange breakpoints, or feedback between geometry and state: read [container-geometry.md](references/container-geometry.md).
 - System container margins, ContentMarginGuide, contentMargins(for:), carousel content insets, or UIKit layoutMarginsGuide: read [layout-margins.md](references/layout-margins.md).
 - ArrangementView ratio/point/ideal-size allocation, sheet placement and bar direction, or custom vertical toolbar legibility on iPhone Duo: read the matching section of [duo-layout-details.md](references/duo-layout-details.md).
