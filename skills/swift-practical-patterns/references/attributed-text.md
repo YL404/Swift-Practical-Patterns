@@ -1,6 +1,6 @@
-# Semantic styling in read-only SwiftUI text
+# Semantic and paragraph styling in read-only SwiftUI text
 
-Use this for distinct measurement-unit typography or app-defined Markdown attributes and link handling. The attributed-text examples need iOS/iPadOS 15+ or macOS 12+; the in-app browser preference needs iOS/iPadOS 26+ or macOS 26+. This reference covers those Apple platforms.
+Use this for distinct measurement-unit typography, app-defined Markdown attributes and link handling, or paragraph baseline distance. The measurement and Markdown examples need iOS/iPadOS 15+ or macOS 12+; the in-app browser preference and line-height API need iOS/iPadOS 26+ or macOS 26+. The paragraph view includes an older-system fallback. This reference covers those Apple platforms.
 
 ## Style a measurement's unit without splitting its formatted string
 
@@ -112,6 +112,40 @@ func documentLinkPolicy(_ url: URL) -> OpenURLAction.Result {
 
 Attach it at the consuming text with `.environment(\.openURL, OpenURLAction(handler: documentLinkPolicy))`. If only the browser preference is needed on 26+, `.onOpenURL(prefersInApp: true)` avoids a custom handler. [Preference-only modifier](https://developer.apple.com/documentation/swiftui/view/onopenurl(prefersinapp:))
 
+## Choose baseline distance separately from the gap between lines
+
+On iOS/iPadOS 26+ and macOS 26+, `lineHeight(_:)` sets the default paragraph line height in the view hierarchy; `nil` lets SwiftUI choose for the context. `AttributedString.LineHeight` describes the distance between successive baselines. `lineSpacing(_:)` instead specifies the gap from the bottom of one line to the top of the next, so the numbers are not interchangeable. [Default line height](https://developer.apple.com/documentation/swiftui/view/lineheight(_:)), [baseline definition](https://developer.apple.com/documentation/foundation/attributedstring/lineheight), [line spacing](https://developer.apple.com/documentation/swiftui/view/linespacing(_:))
+
+Choose the rule for the paragraph:
+
+- `.multiple(factor:)` uses the largest font point size multiplied by the factor. It can grow with a Dynamic Type-aware font.
+- `.leading(increase:)` adds a fixed point increase to the largest font point size. The increase itself does not scale.
+- `.exact(points:)` fixes the total baseline distance, independently of the fonts' ascent and descent. A literal fixed value does not grow with Dynamic Type; check for overlapping or clipped lines as text grows.
+- `.normal`, `.tight`, and `.loose` are point-size-based presets; `.variable` uses font metrics. Keep the default when no explicit paragraph rule is required.
+
+The three numeric rules above ignore effective ascent and descent. A multiple therefore still needs checks with mixed font sizes, scripts, and accessibility text sizes; it is not a guarantee that all glyphs fit. [Multiple](https://developer.apple.com/documentation/foundation/attributedstring/lineheight/multiple(factor:)), [fixed increase](https://developer.apple.com/documentation/foundation/attributedstring/lineheight/leading(increase:)), [exact height](https://developer.apple.com/documentation/foundation/attributedstring/lineheight/exact(points:)), [presets](https://developer.apple.com/documentation/foundation/attributedstring/lineheight)
+
+Complete view definition for paragraph text supplied as a runtime string:
+
+```swift
+struct ParagraphText: View {
+    let text: String
+
+    var body: some View {
+        if #available(iOS 26.0, macOS 26.0, *) {
+            Text(text)
+                .font(.body)
+                .lineHeight(.multiple(factor: 1.3))
+        } else {
+            Text(text)
+                .font(.body.leading(.loose))
+        }
+    }
+}
+```
+
+Include `import SwiftUI`. The factor is an example design choice. The older-system branch uses a font's leading adjustment as an approximate fallback, not an equivalent baseline distance. Some fonts do not support that adjustment and return the original font. Do not combine leading, line spacing, and line height expecting their numeric effects to match or add without layout checks. [Font leading behavior](https://developer.apple.com/documentation/swiftui/font/leading(_:))
+
 ## Evidence and validation limits
 
 Official sources checked 2026-10-23.
@@ -122,9 +156,12 @@ On macOS 27.0.1 arm64, Swift 6 execution covered 36 combinations of four locales
 
 Apple documents extended attributes as disabled by default. In this local runtime, the scoped initializer decoded the custom key with omitted options and with `allowsExtendedAttributes: false` as well as with `true`. This is an observed discrepancy, not a cross-version guarantee. Do not rely on that flag alone to reject custom document values; use the declared scope and decoder. The example uses the documented explicit `true` configuration.
 
+The exact paragraph view and the complete set of fenced Swift definitions in this reference were typechecked again under the Swift 5/6 configurations and iOS 15/macOS 12 deployment targets above. Separate Swift 6 checks of all seven line-height rules and an unguarded modifier passed for iOS/macOS 26; unguarded use was rejected for iOS 18/macOS 15 as expected. These checks establish signatures and availability, not rendered baseline distances or Dynamic Type behavior.
+
 No SwiftUI view was hosted. Font rendering, Dynamic Type, VoiceOver, iOS execution, URL activation, browser presentation, localization extraction, older runtimes, and performance were not tested.
 
 ## Sources
 
 - [Styling measurement unit fonts in SwiftUI](https://nilcoalescing.com/blog/StylingMeasurementUnitFontsInSwiftUI/) (2026-06-07)
 - [Rendering Markdown in SwiftUI](https://artemnovichkov.com/blog/rendering-markdown-in-swiftui) (2026-01-13)
+- [Adjusting line height in SwiftUI on iOS 26](https://nilcoalescing.com/blog/AdjustingLineHeightInSwiftUIOniOS26/) (2026-03-04)
