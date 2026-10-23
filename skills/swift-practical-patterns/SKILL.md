@@ -1,6 +1,6 @@
 ---
 name: swift-practical-patterns
-description: "Swift/SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; shared in-flight loads; async and throwing getters; Observable state initialization, writes, and onChange captures; FormatStyle interpolation, inline symbols, symbol rendering/effects, semantic attributed text, and paragraph line height; map cameras, bounds, and overlays; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; animation timing, phase feedback, and TimelineView cadence; container sizing, geometry breakpoints, and content margins; scroll anchors and position readback; chart dimming; shaders; PDF assets; nested alignment guides, geometry/compositing boundaries, and blend cutouts; macOS toolbar title/background visibility; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use with broader Swift/SwiftUI skills."
+description: "Swift/SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates and fetch shape; sheet dismissal; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; shared in-flight loads; async and throwing getters; Observable state initialization, writes, and onChange captures; FormatStyle interpolation, inline symbols, symbol rendering/effects, semantic attributed text, and paragraph line height; map cameras, bounds, and overlays; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; animation timing, phase feedback, and TimelineView cadence; container sizing, geometry breakpoints, and content margins; scroll anchors and position readback; chart dimming; shaders; PDF assets; nested alignment guides, geometry/compositing boundaries, and blend cutouts; macOS toolbars; and iPhone Duo layouts. Use with broader Swift/SwiftUI skills."
 license: MIT
 metadata:
   version: "0.2.0"
@@ -8,7 +8,7 @@ metadata:
 
 # Swift Practical Patterns
 
-Use focused guidance for Swift app integrations, asynchronous cleanup, synchronous shared state, shared async loads, effectful getters, Observable construction and mutation boundaries, onChange capture semantics, task diagnostics, string and attributed-text formatting, paragraph line height, map cameras and geographic overlays, struct initialization, type syntax, protocol dispatch, symbol effects, chart dimming, Metal shader binding, PDF asset scaling, macro expansion, non-View composition, animation control, scroll-position decisions, nested alignment, rendering boundaries, macOS toolbar appearance, and adaptive layout decisions.
+Use focused guidance for Swift app integrations, sheet dismissal policies, persistence fetch shape, asynchronous cleanup, synchronous shared state, shared async loads, effectful getters, Observable construction and mutation boundaries, onChange capture semantics, task diagnostics, string and attributed-text formatting, paragraph line height, map cameras and geographic overlays, struct initialization, type syntax, protocol dispatch, symbol effects, chart dimming, Metal shader binding, PDF asset scaling, macro expansion, non-View composition, animation control, scroll-position decisions, nested alignment, rendering boundaries, macOS toolbar appearance, and adaptive layout decisions.
 
 ## Apply the guidance
 
@@ -20,6 +20,8 @@ Use focused guidance for Swift app integrations, asynchronous cleanup, synchrono
 
 - SwiftUI background content refresh, BGAppRefreshTaskRequest, scene registration, request replacement, or cancellation: read [background-refresh.md](references/background-refresh.md).
 - Seeded duplicates, business and record identity, duplicate diagnosis, or reconciliation decisions in SwiftData automatic CloudKit sync: read [swiftdata-sync.md](references/swiftdata-sync.md).
+- SwiftData list fetch cost, large detail fields, propertiesToFetch, relationship prefetching, or deciding whether to split a model: read [swiftdata-fetch-shape.md](references/swiftdata-fetch-shape.md).
+- Unsaved sheet edits, interactive versus programmatic dismissal, or detent changes mistaken for close attempts: read [sheet-dismissal.md](references/sheet-dismissal.md).
 - Core Spotlight indexing, updates/deletion, deep links, reindexing, CSUserQuery, or stale in-app search results: read [core-spotlight.md](references/core-spotlight.md).
 - In-app text translation, translationPresentation, TranslationSession configuration and repeat requests, language assets, or batch correlation: read [translation.md](references/translation.md).
 - Awaited resource cleanup, asynchronous test teardown, Swift 6.4 defer bodies with await, or cleanup cancellation/error boundaries: read [async-cleanup.md](references/async-cleanup.md).
