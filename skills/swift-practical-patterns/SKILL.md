@@ -3,7 +3,7 @@ name: swift-practical-patterns
 description: "Swift/SwiftUI patterns: background refresh; SwiftData/CloudKit seeded duplicates; Core Spotlight; in-app Translation; async defer cleanup; task naming; Mutex and Atomic state; shared in-flight loads; async and throwing getters; Observable state initialization, writes, and onChange captures; FormatStyle interpolation, inline symbols, symbol rendering/effects, semantic attributed text, and paragraph line height; map cameras, bounds, and overlays; memberwise initialization; optional opaque/existential syntax; protocol dispatch; macro type diagnostics and inferred fields; non-View ContentBuilder DSLs; animation timing, phase feedback, and TimelineView cadence; container sizing, geometry breakpoints, and content margins; scroll anchors and position readback; chart dimming; shaders; PDF assets; nested alignment guides, geometry/compositing boundaries, and blend cutouts; macOS toolbar title/background visibility; and iPhone Duo arrangement, sheet, and vertical toolbar details. Use with broader Swift/SwiftUI skills."
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Swift Practical Patterns
