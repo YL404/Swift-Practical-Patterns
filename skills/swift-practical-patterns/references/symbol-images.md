@@ -2,6 +2,31 @@
 
 Use this for standalone SF Symbols whose layers, variable value, or animation do not match the intended state. For a symbol inside a localized sentence, use [inline-symbols.md](inline-symbols.md). Symbol names and supported layers/effects have their own availability; an available modifier does not make every symbol support it.
 
+## Verify names and rendering availability
+
+When [SF Symbols 27](https://developer.apple.com/sf-symbols/) is installed on the development Mac, its bundled CLI can check catalog names before they enter source code. Locate the installed app and read that version's `help search`; the example uses the usual installation location and does not require changing shell configuration. Earlier app versions may lack this CLI. The catalog tool's version is separate from the app's deployment targets.
+
+Runnable shell examples with SF Symbols 27:
+
+```bash
+sfsymbols_tool="/Applications/SF Symbols.app/Contents/Executables/sfsymbols"
+"$sfsymbols_tool" help search
+"$sfsymbols_tool" search sun.max --match-style nameContains \
+    --min-platform iOS15 --min-platform macOS12
+"$sfsymbols_tool" search xmark.bin --match-style exactName \
+    --min-platform iOS13 --json
+"$sfsymbols_tool" search heart.fill --match-style exactName \
+    --min-platform iOS13 --json
+```
+
+Use permissive or substring search to find candidates, then `exactName` to validate one dotted name. Repeated `--min-platform` filters require every listed platform. For a renamed symbol, inspect the returned `name`, not just the query: the iOS 13 `xmark.bin` query above returns `bin.xmark` with `modernName: xmark.bin`. Recheck the spelling chosen for all supported platforms; use an availability branch or another symbol where needed.
+
+Check the exit status, parse stdout as JSON, and read stderr separately. A successful search can return `[]`, meaning no match in the searched catalog under those filters; repeat without platform filters to distinguish a missing name from a deployment mismatch. Invalid platform syntax is a command error. Catalog diagnostics may report unsupported custom symbols, so an empty result does not establish that an app's custom asset is absent.
+
+The platform filter checks symbol existence, not every rendering mode. JSON contains `availability` by mode and platform: `heart.fill` still matches iOS 13 although its multicolor data starts at iOS 15. Compare the intended mode's versions with every deployment target, and separately gate the SwiftUI modifier. Missing mode metadata does not establish support. A compile check of `Image(systemName:)` alone does not validate its string against the catalog.
+
+For a review image, `export --format png` or `pdf` produces rendered artwork; `--point-size` sets glyph typography and `--image-scale` scales the output, rather than promising a square canvas of that size. Read `help export` for the installed options. SVG export is an editable symbol template, not a ready-made rendered icon; preserve its structure and follow Apple's [custom symbol validation](https://developer.apple.com/documentation/technologyoverviews/custom-sf-symbols) when editing it. Catalog lookup or an exported image does not verify the app's runtime rendering or accessibility.
+
 ## Choose the color mechanism
 
 Rendering modes and multiple foreground styles require iOS/iPadOS 15+ or macOS 12+.
@@ -87,9 +112,12 @@ struct SymbolFeedbackControls: View {
 
 Official documentation checked 2026-10-23. Color rules correct the source's claim that multicolor always ignores foreground styles. Basic typography and conventional labels remain covered by broader SwiftUI guidance.
 
+Catalog guidance additionally checked 2026-10-25 against SF Symbols 27.0 (140) command help and Apple's custom-symbol documentation on arm64 macOS 27.0.1 (26A434). The exact shell block passed; additional queries confirmed empty successful results, invalid-platform failure, old-name output, platform intersection, and separate rendering-mode metadata. The local catalog reported a skipped custom symbol on stderr. PNG/PDF/SVG exports succeeded; the tested 64-point, scale-3 `heart.circle.fill` PNG measured 198 by 198 pixels, an observation for that configuration. A nonexistent name still typechecked with Xcode 27.1, Apple Swift 6.4, Swift 6, complete strict concurrency, nonisolated default isolation, and warnings as errors for arm64 iOS 13 (SDK 27.1) and macOS 11 (SDK 27.0). These checks do not establish older catalog/runtime behavior, symlink behavior, custom-symbol export, or app UI behavior. The unchanged Swift examples retain their earlier validation below.
+
 The two exact Swift blocks were typechecked with Xcode 27.1 (27A9275), Apple Swift 6.4, complete strict concurrency, and warnings as errors. Together with the chart example, they passed eight configurations: Swift 5/6 × nonisolated/MainActor default isolation on arm64 macOS 12.0 (SDK 27.0) and arm64 iOS 15.0 (SDK 27.1). Availability annotations protect the newer declarations; no additional upcoming features were enabled. Five separate macOS probes confirmed rejection of scale as a discrete effect, bounce as a content-transition effect, drawOn as a discrete effect, and breathe/drawOn below macOS 15/26 respectively. These checks use the current compiler, not historical SDKs. No visual animation, rapid retriggering, automatic morph, Reduce Motion behavior, VoiceOver output, symbol fallback, or older runtime behavior is established by typechecking. Verify those in the target interface; do not promise that symbol effects synchronize application work or deliver every rapid event.
 
 ## Sources
 
+- [SF Symbols from the Command Line and AI Agents](https://artemnovichkov.com/blog/sf-symbols-from-the-command-line-and-ai-agents) (2026-09-27)
 - [Customizing the appearance of symbol images in SwiftUI](https://nilcoalescing.com/blog/CustomizingTheAppearanceOfSymbolImagesInSwiftUI/) (2024-07-22)
 - [Animating SF Symbols in SwiftUI](https://nilcoalescing.com/blog/AnimatingSFSymbolsInSwiftUI/) (2025-12-18)

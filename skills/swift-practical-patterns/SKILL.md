@@ -1,6 +1,6 @@
 ---
 name: swift-practical-patterns
-description: "Focused Swift and SwiftUI implementation guidance for app integrations (App Attest, background refresh, Live Activities, notifications, SwiftData/CloudKit, Spotlight, Translation, Foundation Models, App Intents tests and widgets); concurrency cleanup, task outcomes/names, shared state and Sendable audits; Observation and state initialization; Swift type syntax, dispatch, macros and builders; text, symbols, charts, maps, shaders and vector assets; navigation, sheets and drag selection; animation, geometry, scrolling, alignment, rendering and glass controls; adaptive iPhone Duo and macOS toolbars; preview fixtures. Use for these concrete implementation decisions alongside broader Swift/SwiftUI skills."
+description: "Focused Swift and SwiftUI implementation guidance for app integrations (App Attest, background refresh, Live Activities, notifications, SwiftData/CloudKit, Spotlight, Translation, Foundation Models, App Intents tests and widgets); concurrency cleanup, task outcomes/names, shared state and Sendable audits; Observation and state initialization; Swift type syntax, dispatch, macros and builders; text, symbol catalog checks, charts, maps, shaders and vector assets; navigation, sheets and drag selection; animation, geometry, scrolling, alignment, rendering and glass controls; adaptive iPhone Duo and macOS toolbars; preview fixtures; Xcode build timing, compilation caches and archive/dSYM retention. Use for these concrete implementation decisions alongside broader Swift/SwiftUI skills."
 license: MIT
 metadata:
   version: "0.2.0"
@@ -18,6 +18,8 @@ Use this guidance alongside broader Swift/SwiftUI skills for App Attest key regi
 
 ## Task routing
 
+- Xcode clean/no-change/edit build comparisons, repeated scripts, or compilation-cache evaluation: read [xcode-build-performance.md](references/xcode-build-performance.md).
+- Disk-pressure decisions about build artifacts, distributed archive retention, or matching binaries and dSYMs by UUID: read [build-artifact-retention.md](references/build-artifact-retention.md).
 - Selection-driven multi-item drag payloads, matching identifier/namespace scope, or selection order in reorder differences: read [collection-drag-selection.md](references/collection-drag-selection.md).
 - App Attest key registration/reuse, challenge-bound requests, server verification boundaries, environment separation, or retry/counter coordination: read [app-attest.md](references/app-attest.md).
 - Choosing a sheet transition at runtime, AnyNavigationTransition, crossFade, or platform/availability limits: read [navigation-transitions.md](references/navigation-transitions.md).
@@ -45,7 +47,7 @@ Use this guidance alongside broader Swift/SwiftUI skills for App Attest key regi
 - Migrating onChange capture lists, preserving old/new values, initial delivery versus app initialization, or View/Scene closure semantics: read [on-change.md](references/on-change.md).
 - Custom FormatStyle interpolation in plain String literals, generic input/output constraints, or choosing between a formatting extension and localized interpolation: read [string-interpolation.md](references/string-interpolation.md).
 - Inline SF Symbols inside a sentence, LocalizedStringKey image interpolation, or styling an interpolated symbol while preserving Image/Text types: read [inline-symbols.md](references/inline-symbols.md).
-- Standalone SF Symbol palette/multicolor rules, variable values, or choosing state, event, replacement, and insertion/removal effects: read [symbol-images.md](references/symbol-images.md).
+- SF Symbols CLI name/rename and deployment checks, standalone palette/multicolor rules, variable values, or choosing state, event, replacement, and insertion/removal effects: read [symbol-images.md](references/symbol-images.md).
 - Map initial versus bound camera position, center/zoom bounds, or geographic polygon, polyline, and radius overlays: read [map-camera-overlays.md](references/map-camera-overlays.md).
 - SwiftUI Metal color/distortion/layer contracts, shader function lookup, uniform order, point coordinates, or sampling bounds: read [shader-effects.md](references/shader-effects.md).
 - Circular glass buttons, buttonBorderShape versus clipping, containerShape, concentric corner minima/uniformity, or invalid RoundedCornerStyle.concentric syntax: read [control-shapes.md](references/control-shapes.md).
