@@ -33,7 +33,7 @@ Use this guidance alongside broader Swift/SwiftUI skills for App Attest key regi
 - Core Spotlight indexing, updates/deletion, deep links, reindexing, CSUserQuery, or stale in-app search results: read [core-spotlight.md](references/core-spotlight.md).
 - In-app text translation, translationPresentation, TranslationSession configuration and repeat requests, language assets, or batch correlation: read [translation.md](references/translation.md).
 - Awaited resource cleanup, asynchronous test teardown, Swift 6.4 defer bodies with await, OS 27 cancellation shields, or cleanup cancellation/error boundaries: read [async-cleanup.md](references/async-cleanup.md).
-- Reusable Foundation Models profile modifiers, model/default precedence, request-local history transforms, or response-token caps: read [dynamic-model-profiles.md](references/dynamic-model-profiles.md).
+- Reusable Foundation Models profile modifiers, model/default precedence, request-local history transforms, response-token caps, local token-budget screening, or cloud-routing boundaries: read [dynamic-model-profiles.md](references/dynamic-model-profiles.md).
 - Unused throwing Task warnings, task failure ownership, SDK limits on typed task initializers, or async Result capture: read [task-outcomes.md](references/task-outcomes.md).
 - Fixed weak delegates in Sendable classes, weak let, or intentionally suppressing inferred conformance with ~Sendable: read [sendability-declarations.md](references/sendability-declarations.md).
 - Testing registered App Intents and entity references out of process, or selecting a UI test target without importing app internals: read [app-intents-testing.md](references/app-intents-testing.md).
@@ -55,7 +55,7 @@ Use this guidance alongside broader Swift/SwiftUI skills for App Attest key regi
 - Masking an elapsed-time overlay to an area/line chart, plot-relative gradients, or cutoff versus nearest-sample semantics: read [chart-dimming.md](references/chart-dimming.md).
 - Sunburst parent-child angular alignment, positive-weight partitions, or inner versus outer radius ratios: read [sunburst-charts.md](references/sunburst-charts.md).
 - Calendar heatmap weekday projection, real-date identity, missing-day slots, or native versus synthetic chart accessibility: read [calendar-charts.md](references/calendar-charts.md).
-- Semantic measurement-unit fonts, custom Markdown attribute decoding and rendering mappings, attributed-text link policies and in-app browser preferences, or paragraph line height versus line spacing and Dynamic Type: read [attributed-text.md](references/attributed-text.md).
+- Bundled custom-font registration or silent fallback, semantic measurement-unit fonts, custom Markdown attribute decoding and rendering mappings, attributed-text link policies and in-app browser preferences, or paragraph line height versus line spacing and Dynamic Type: read [attributed-text.md](references/attributed-text.md).
 - Synthesized struct memberwise initializers, Swift 6.4 private initialized storage, inaccessible initializers, or extension initializer conflicts: read [memberwise-initializers.md](references/memberwise-initializers.md).
 - Protocol extension calls that bypass a concrete implementation, requirement defaults, or dispatch semantics versus optimization: read [protocol-dispatch.md](references/protocol-dispatch.md).
 - Macro constraint diagnostics selected through overloads, omitted field annotations in generated signatures, or associated-type witness limits: read [macro-type-information.md](references/macro-type-information.md).

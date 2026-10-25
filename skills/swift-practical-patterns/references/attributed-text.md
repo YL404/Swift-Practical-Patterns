@@ -1,6 +1,16 @@
-# Semantic and paragraph styling in read-only SwiftUI text
+# Fonts, semantic styles, and paragraphs in read-only SwiftUI text
 
-Use this for distinct measurement-unit typography, app-defined Markdown attributes and link handling, or paragraph baseline distance. The measurement and Markdown examples need iOS/iPadOS 15+ or macOS 12+; the in-app browser preference and line-height API need iOS/iPadOS 26+ or macOS 26+. The paragraph view includes an older-system fallback. This reference covers those Apple platforms.
+Use this for bundled custom-font failures, distinct measurement-unit typography, app-defined Markdown attributes and link handling, or paragraph baseline distance. The measurement and Markdown examples need iOS/iPadOS 15+ or macOS 12+; the in-app browser preference and line-height API need iOS/iPadOS 26+ or macOS 26+. The paragraph view includes an older-system fallback. This reference covers those Apple platforms.
+
+## Diagnose a custom font before adjusting its styling
+
+A successful build or visible text does not establish that the requested font loaded. SwiftUI falls back to the system font when it cannot retrieve the named font. Check the resource, registration, and name before changing sizes or weights. [Apple custom-font setup and fallback](https://developer.apple.com/documentation/swiftui/applying-custom-fonts-to-text)
+
+For fonts shipped with an iOS/iPadOS app, verify target membership and the actual files in the built app bundle, then list their bundle-relative paths, including extensions, in the `UIAppFonts` array. A native macOS app instead uses `ATSApplicationFontsPath` with the folder containing its bundled fonts. Installing a font on the development Mac does not package it for another target. Keep these platform configurations separate. [Platform-specific registration](https://developer.apple.com/documentation/swiftui/applying-custom-fonts-to-text)
+
+Use the font's **PostScript name** in `Font.custom`, not its resource filename or a family name guessed from Font Book. For example, `Font.custom("BrandText-Regular", size: 17, relativeTo: .body)` uses a placeholder PostScript name; replace it with the name from the licensed font actually bundled with the app. This initializer requires iOS/iPadOS 14+ or macOS 11+ and preserves scaling relative to the chosen text style. [Initializer and availability](https://developer.apple.com/documentation/swiftui/font/custom(_:size:relativeTo:))
+
+If the base font loads but bold or italic styling has no effect, check whether that font supplies the corresponding variant. SwiftUI does not synthesize missing bold or italic styles. Verify the bundled font on the target platform, including larger Dynamic Type sizes; a font present in the Mac's catalog is not evidence of availability on iOS. [Font variants and scaling](https://developer.apple.com/documentation/swiftui/applying-custom-fonts-to-text)
 
 ## Style a measurement's unit without splitting its formatted string
 
@@ -148,7 +158,7 @@ Include `import SwiftUI`. The factor is an example design choice. The older-syst
 
 ## Evidence and validation limits
 
-Official sources checked 2026-10-23.
+Official sources for the existing styling examples checked 2026-10-23. Custom-font setup, fallback, variants, and initializer availability checked against Apple documentation on 2026-10-25. The placeholder font expression passed Swift 6 typechecking for iOS 14/macOS 11 using the toolchain below; no font resource, app bundle, registration, or rendered variant was tested.
 
 The exact helpers and consuming views passed typechecking with warnings treated as errors using Xcode 27.1 (27A9275), Apple Swift 6.4, complete strict concurrency, explicit nonisolated default isolation, and no additional upcoming features in Swift 6 and Swift 5 modes. Targets were arm64 iOS 15 with the iPhoneOS 27.1 SDK and arm64 macOS 12 with the macOS 27.0 SDK. These deployment-target checks do not test older compilers or older OS runtimes.
 
@@ -165,3 +175,4 @@ No SwiftUI view was hosted. Font rendering, Dynamic Type, VoiceOver, iOS executi
 - [Styling measurement unit fonts in SwiftUI](https://nilcoalescing.com/blog/StylingMeasurementUnitFontsInSwiftUI/) (2026-06-07)
 - [Rendering Markdown in SwiftUI](https://artemnovichkov.com/blog/rendering-markdown-in-swiftui) (2026-01-13)
 - [Adjusting line height in SwiftUI on iOS 26](https://nilcoalescing.com/blog/AdjustingLineHeightInSwiftUIOniOS26/) (2026-03-04)
+- [SwiftUI Font and Texts](https://www.swiftyplace.com/blog/swiftui-font-and-texts) (2023-06-01)
