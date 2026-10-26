@@ -1,6 +1,6 @@
 # Type-directed Swift macro expansions
 
-Use this when a macro needs a property constraint diagnostic or a generated signature for a field whose type annotation was omitted. Prefer an explicit annotation when it keeps a small macro or a public API simpler. These techniques let the **compiler** select or infer types; the macro implementation still receives syntax, not a general type-checker query API. [SE-0382](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0382-expression-macros.md#type-checked-macro-arguments-and-results)
+Use this when a macro needs a property constraint diagnostic, a generated signature for an inferred field, or tests of compiler-enforced contracts. Prefer an explicit annotation when it keeps a small macro or a public API simpler. These techniques let the **compiler** select or infer types; the macro implementation still receives syntax, not a general type-checker query API. [SE-0382](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0382-expression-macros.md#type-checked-macro-arguments-and-results)
 
 Attached macros require a Swift 5.9-capable toolchain. The nested-protocol form below additionally requires Swift 5.10 and a non-generic context; an OS availability check cannot add a compiler feature. Match SwiftSyntax to the macro target's toolchain. [SE-0389](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0389-attached-macros.md), [SE-0404](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0404-nested-protocols.md)
 
@@ -96,6 +96,14 @@ Keep these limits beside the generator:
 - Public signatures cannot depend on private helper types. The example intentionally makes the helpers public; that expands the exposed API. Validate access levels and name collisions, or keep the field's explicit type in the public API. [Swift access control](https://github.com/swiftlang/swift-book/blob/main/TSPL.docc/LanguageGuide/AccessControl.md#guiding-principle-of-access-levels)
 - Moving an initializer expression into a nested witness can change name lookup, contextual typing, access, and isolation. Do not infer universal support from constructor-shaped expressions, and do not promise support for property wrappers or arbitrary defaults without generator-specific checks.
 
+## Test compiler-enforced contracts
+
+Expansion snapshots check generated syntax and parser/macro diagnostics. They do not establish that overload selection, generated conformances, access control, or isolation satisfy the Swift type checker. For those contracts, also compile client fixtures against the actual library and macro plugin. The inspected [SwiftSyntax assertion](https://github.com/swiftlang/swift-syntax/blob/c161c39b9687945370b430708e8a3795b707291a/Sources/SwiftSyntaxMacrosGenericTestSupport/Assertions.swift) parses and expands syntax; the compiler separately checks macro arguments and results under [SE-0382](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0382-expression-macros.md#type-checked-macro-arguments-and-results).
+
+Keep deliberately invalid code in snippet strings passed to a compiler-backed harness, or in separately compiled fixture files, so it does not prevent the normal test target from building. Pair a supported use with a rejected use. Check the intended diagnostic as well as compilation status: a missing import or unloaded plugin is not proof that the library rejected the misuse. When recording diagnostic snapshots, review the output and rerun against the approved expectation.
+
+Record the compiler, SDK, target, language mode, strict-concurrency level, default isolation, and relevant feature flags. A successful compiler exit can still emit warnings; require empty diagnostics only when that is the intended contract. Swift 5 versus Swift 6 alone does not determine concurrency diagnostics: [global-storage checks](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0412-strict-concurrency-for-global-variables.md) and [default isolation](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0466-control-default-actor-isolation.md) also matter. Runtime promises, such as preserving default-expression evaluation, still need execution checks.
+
 ## Evidence and validation limits
 
 Official sources checked 2026-10-22–23; local validation completed 2026-10-23. Local validation used macOS 27.0.1 arm64, Xcode 27.1 (27A9275), Apple Swift 6.4 (swiftlang-6.4.0.34.1), complete strict concurrency, default isolation explicitly `nonisolated`, and no additional upcoming features.
@@ -104,7 +112,10 @@ In Swift 6 and Swift 5 language modes on that compiler, a locally built macro pl
 
 These are macro/compiler and local execution checks, not a complete derivation or memberwise macro implementation. Older compilers, other platforms, editor diagnostic placement, property-wrapper inference, arbitrary default relocation, library evolution, compile-time performance, and application behavior were not validated.
 
+Compiler-test guidance checked 2026-10-26 against the linked SwiftSyntax assertion and the [MacroTesting implementation](https://github.com/pointfreeco/swift-macro-testing/blob/47751a42d88ae202b245e111807c2ad6929211c1/Sources/MacroTesting/AssertMacro.swift). Separate `swiftc -typecheck` checks used macOS 27.0.1 arm64, Xcode 27.1 (27A9275), Apple Swift 6.4 (swiftlang-6.4.0.34.1), the macOS 27.0 SDK, and an arm64 macOS 27.0 target, with no added feature flags. For a class with mutable instance storage and `static let shared = Model()`, explicit nonisolated default isolation produced no diagnostics in Swift 5 with minimal checking, a warning in Swift 5 with complete checking, and an error in Swift 6 with complete checking. Swift 6 with complete checking and MainActor default isolation produced no diagnostics. These are configuration-sensitive typechecks, not executions of CompilationTesting; its private beta, dependency discovery, plugin loading, snapshot recording, fix-its, and CI behavior were not validated.
+
 ## Sources
 
 - [Advanced macro technique #1: Static type information](https://www.pointfree.co/blog/posts/232-advanced-macro-technique-1-static-type-information) (2026-10-07)
 - [Advanced macro technique #2: Type inference](https://www.pointfree.co/blog/posts/233-advanced-macro-technique-2-type-inference) (2026-10-08)
+- [Beta Preview: CompilationTesting](https://www.pointfree.co/blog/posts/234-beta-preview-compilationtesting) (2026-10-26)
