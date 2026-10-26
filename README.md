@@ -6,11 +6,12 @@ This skill offers focused guidance and works well alongside other community-main
 
 ## What's included
 
-- App integrations: background refresh, SwiftData and CloudKit identity, Core Spotlight, and in-app translation.
-- Swift patterns: asynchronous cleanup, string formatting, memberwise initialization, optional protocol types, and protocol method selection.
-- SwiftUI details: localized inline symbols, symbol rendering and effects, masked chart dimming, animation timing and timelines, system margins, and adaptive layout and presentation.
+- App integrations: Assistive Access, App Attest, background refresh, Live Activities, notifications, SwiftData and CloudKit, Core Spotlight, Translation, Foundation Models, App Intents testing, and widgets.
+- Swift language and concurrency: asynchronous cleanup, task outcomes and naming, shared state and Sendable, Observation, string formatting, initialization, optional types, protocol dispatch, macros, and non-View builders.
+- SwiftUI: text and symbols, charts and maps, shaders and assets, navigation, sheets and drag selection, animation, scrolling, layout and alignment, rendering boundaries, controls, and toolbars.
+- Development workflows: preview fixtures, Xcode build timing and compilation caches, and archive and dSYM retention.
 
-See the [skill's task routing](skills/swift-practical-patterns/SKILL.md#task-routing) for individual references.
+See the [skill's task routing](skills/swift-practical-patterns/SKILL.md#task-routing) for individual references, and [releases](https://github.com/YL404/Swift-Practical-Patterns/releases) for version history.
 
 ## Installation
 

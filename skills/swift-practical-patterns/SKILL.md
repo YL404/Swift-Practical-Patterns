@@ -20,7 +20,6 @@ Use this guidance alongside broader Swift/SwiftUI skills for Assistive Access sc
 
 - Assistive Access scenes, streamlined versus full-screen configuration, runtime detection or preview limits on iPhone/iPad: read [assistive-access.md](references/assistive-access.md).
 - Custom row colors over selection, backgroundProminence scope, or system selection backgrounds versus manual focus tracking: read [selection-appearance.md](references/selection-appearance.md).
-
 - Xcode clean/no-change/edit build comparisons, repeated scripts, or compilation-cache evaluation: read [xcode-build-performance.md](references/xcode-build-performance.md).
 - Disk-pressure decisions about build artifacts, distributed archive retention, or matching binaries and dSYMs by UUID: read [build-artifact-retention.md](references/build-artifact-retention.md).
 - Selection-driven multi-item drag payloads, matching identifier/namespace scope, or selection order in reorder differences: read [collection-drag-selection.md](references/collection-drag-selection.md).
