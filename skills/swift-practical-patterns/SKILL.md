@@ -3,7 +3,7 @@ name: swift-practical-patterns
 description: "Focused Swift and SwiftUI implementation guidance for app integrations (Assistive Access, App Attest, background refresh, Live Activities, notifications, SwiftData/CloudKit, Spotlight, Translation, Foundation Models, App Intents tests and widgets); concurrency cleanup, task outcomes/names, shared state and Sendable audits; Observation and state initialization; Swift type syntax, dispatch, macros and builders; text, symbol catalog checks, charts, maps, shaders and vector assets; navigation, sheets and drag selection; animation, geometry, scrolling, alignment, rendering and glass controls; adaptive iPhone Duo, selection foregrounds and macOS toolbars; preview fixtures; Xcode build timing, compilation caches and archive/dSYM retention. Use for these concrete implementation decisions alongside broader Swift/SwiftUI skills."
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Swift Practical Patterns
