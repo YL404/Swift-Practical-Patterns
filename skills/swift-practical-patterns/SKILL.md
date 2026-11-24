@@ -23,7 +23,7 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 - Assistive Access scenes, streamlined versus full-screen configuration, runtime detection or preview limits on iPhone/iPad: [assistive-access.md](references/assistive-access.md)
 - App Attest key registration/reuse, challenge-bound requests, server verification boundaries, environment separation, or retry/counter coordination: [app-attest.md](references/app-attest.md)
 - SwiftUI background content refresh, BGAppRefreshTaskRequest, scene registration, request replacement, or cancellation: [background-refresh.md](references/background-refresh.md)
-- Local Live Activity configuration, ActivityContent updates, stale dates, final content/dismissal, or relaunch reconciliation: [live-activities.md](references/live-activities.md)
+- Local Live Activity configuration, ActivityContent updates, stale dates, final content/dismissal, relaunch reconciliation, or iOS 17.2+ push-to-start with background asset hydration and MainActor-default-isolation ActivityAttributes: [live-activities.md](references/live-activities.md)
 - Audio downloaded by notification service extensions, App Group sound lookup, expiry completion, or choosing UserNotifications versus AlarmKit: [notification-service-audio.md](references/notification-service-audio.md)
 - Seeded duplicates, business and record identity, duplicate diagnosis, or reconciliation decisions in SwiftData automatic CloudKit sync: [swiftdata-sync.md](references/swiftdata-sync.md)
 - SwiftData list fetch cost, large detail fields, propertiesToFetch, relationship prefetching, or deciding whether to split a model: [swiftdata-fetch-shape.md](references/swiftdata-fetch-shape.md)
@@ -32,6 +32,7 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 - Reusable Foundation Models profile modifiers, model/default precedence, request-local history transforms, response-token caps, local token-budget screening, or cloud-routing boundaries: [dynamic-model-profiles.md](references/dynamic-model-profiles.md)
 - Testing registered App Intents and entity references out of process, or selecting a UI test target without importing app internals: [app-intents-testing.md](references/app-intents-testing.md)
 - Widget gallery location preferences, carPlay availability, or confusing disfavoredLocations with hiding or privacy enforcement: [widget-placement.md](references/widget-placement.md)
+- Checking whether an OSLog level is enabled before expensive diagnostic work on pre-26.4 OS targets, or avoiding strong-linked Logger.isEnabled(type:) launch crashes: [oslog-availability.md](references/oslog-availability.md)
 
 ### Swift language and concurrency
 
@@ -60,6 +61,7 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 - Selection-driven multi-item drag payloads, matching identifier/namespace scope, or selection order in reorder differences: [collection-drag-selection.md](references/collection-drag-selection.md)
 - Custom row colors over selection, backgroundProminence scope, or system selection backgrounds versus manual focus tracking: [selection-appearance.md](references/selection-appearance.md)
 - Default scroll anchor roles, ScrollPosition readback versus live offsets, or target identity and anchor selection: [scroll-position.md](references/scroll-position.md)
+- Choosing among scrollTransition, visualEffect, onScrollVisibilityChange, onScrollTargetVisibilityChange (idType: label), and clamped onScrollGeometryChange offsets: [scroll-driven-effects.md](references/scroll-driven-effects.md)
 - Sizing cards with containerRelativeFrame, count/span spacing, onGeometryChange breakpoints, or feedback between geometry and state: [container-geometry.md](references/container-geometry.md)
 - Replacing size proposals with fixedSize(), flexible shape ideal-size order, container-level equal-height matching, or unclipped overflow and sibling starvation: [fixed-size.md](references/fixed-size.md)
 - Aligning a sibling with a nested title, custom AlignmentID fallbacks, active guide selection, or projected alignment values: [alignment-guides.md](references/alignment-guides.md)
@@ -88,5 +90,5 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 ### Previews and Xcode workflows
 
 - Xcode 27 preview argument groups and their deployment/runtime requirements, or offline Foundation Models PartiallyGenerated fixtures: [preview-state-fixtures.md](references/preview-state-fixtures.md)
-- Xcode clean/no-change/edit build comparisons, repeated scripts, or compilation-cache evaluation: [xcode-build-performance.md](references/xcode-build-performance.md)
+- Xcode clean/no-change/edit build comparisons, repeated scripts, compilation-cache evaluation, or choosing between Xcode MCP (mcpbridge/mcp-server) and xcodebuild: [xcode-build-performance.md](references/xcode-build-performance.md)
 - Disk-pressure decisions about build artifacts, distributed archive retention, or matching binaries and dSYMs by UUID: [build-artifact-retention.md](references/build-artifact-retention.md)

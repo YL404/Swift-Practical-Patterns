@@ -1,6 +1,6 @@
 # Scroll anchors and position readback
 
-Use this reference when a `ScrollView` needs different initial and small-content alignment, or when a position binding is mistaken for a live offset or an end-of-content test. For card dimensions and margins, see [container-geometry.md](container-geometry.md) and [layout-margins.md](layout-margins.md).
+Use this reference when a `ScrollView` needs different initial and small-content alignment, or when a position binding is mistaken for a live offset or an end-of-content test. For scroll-driven visual effects, visibility thresholds, and clamping bounced offsets for external UI, see [scroll-driven-effects.md](scroll-driven-effects.md). For card dimensions and margins, see [container-geometry.md](container-geometry.md) and [layout-margins.md](layout-margins.md).
 
 Official documentation and SDK declarations checked 2026-10-23. `defaultScrollAnchor(_:)` requires iOS 17 / macOS 14. Its role-specific overload, `ScrollPosition`, and `onScrollGeometryChange` require iOS 18 / macOS 15 with an SDK that declares them. For iOS 17 / macOS 14, an optional ID binding with `scrollPosition(id:)` remains available; [ScrollViewReader](https://developer.apple.com/documentation/swiftui/scrollviewreader) supports iOS 14 / macOS 11 for older targets or proxy-based control. This reference covers `ScrollView`.
 
