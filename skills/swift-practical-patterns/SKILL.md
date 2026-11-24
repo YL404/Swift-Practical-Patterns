@@ -27,6 +27,7 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 - Audio downloaded by notification service extensions, App Group sound lookup, expiry completion, or choosing UserNotifications versus AlarmKit: [notification-service-audio.md](references/notification-service-audio.md)
 - Seeded duplicates, business and record identity, duplicate diagnosis, or reconciliation decisions in SwiftData automatic CloudKit sync: [swiftdata-sync.md](references/swiftdata-sync.md)
 - SwiftData list fetch cost, large detail fields, propertiesToFetch, relationship prefetching, or deciding whether to split a model: [swiftdata-fetch-shape.md](references/swiftdata-fetch-shape.md)
+- SwiftData save() failure recovery, transaction(block:) non-rollback, DefaultStore context poisoning, duplicate-insert detach on rollback, or parallel failure-injection tests: [swiftdata-save-recovery.md](references/swiftdata-save-recovery.md)
 - Core Spotlight indexing, updates/deletion, deep links, reindexing, CSUserQuery, or stale in-app search results: [core-spotlight.md](references/core-spotlight.md)
 - In-app text translation, translationPresentation, TranslationSession configuration and repeat requests, language assets, or batch correlation: [translation.md](references/translation.md)
 - Reusable Foundation Models profile modifiers, model/default precedence, request-local history transforms, response-token caps, local token-budget screening, or cloud-routing boundaries: [dynamic-model-profiles.md](references/dynamic-model-profiles.md)
@@ -79,7 +80,7 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 - Inline SF Symbols inside a sentence, LocalizedStringKey image interpolation, or styling an interpolated symbol while preserving Image/Text types: [inline-symbols.md](references/inline-symbols.md)
 - SF Symbols CLI name/rename and deployment checks, standalone palette/multicolor rules, variable values, or choosing state, event, replacement, and insertion/removal effects: [symbol-images.md](references/symbol-images.md)
 - PDF image assets that blur when enlarged, Single Scale versus Preserve Vector Data, or bitmap conversion before scaling: [vector-assets.md](references/vector-assets.md)
-- CustomAnimation completion/merging, spring duration versus completion criteria, phase reset and event feedback, or TimelineView schedules/cadence: [animation-control.md](references/animation-control.md)
+- CustomAnimation completion/merging/thread safety (macOS vs iOS), spring duration versus completion criteria, phase reset and event feedback, or TimelineView schedules/cadence: [animation-control.md](references/animation-control.md)
 - Descendants separating during ancestor animations, combined opacity, destinationOut cutout scope, layered gradient-stroke halos and clipping order, or drawingGroup support/alpha limits: [rendering-groups.md](references/rendering-groups.md)
 - SwiftUI Metal color/distortion/layer contracts, shader function lookup, uniform order, point coordinates, or sampling bounds: [shader-effects.md](references/shader-effects.md)
 - Masking an elapsed-time overlay to an area/line chart, plot-relative gradients, or cutoff versus nearest-sample semantics: [chart-dimming.md](references/chart-dimming.md)
@@ -90,5 +91,5 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 ### Previews and Xcode workflows
 
 - Xcode 27 preview argument groups and their deployment/runtime requirements, or offline Foundation Models PartiallyGenerated fixtures: [preview-state-fixtures.md](references/preview-state-fixtures.md)
-- Xcode clean/no-change/edit build comparisons, repeated scripts, compilation-cache evaluation, or choosing between Xcode MCP (mcpbridge/mcp-server) and xcodebuild: [xcode-build-performance.md](references/xcode-build-performance.md)
+- Xcode clean/no-change/edit build comparisons, repeated scripts, compilation-cache evaluation or prefix-mapped grey LLDB breakpoints, or choosing between Xcode MCP (mcpbridge/mcp-server) and xcodebuild: [xcode-build-performance.md](references/xcode-build-performance.md)
 - Disk-pressure decisions about build artifacts, distributed archive retention, or matching binaries and dSYMs by UUID: [build-artifact-retention.md](references/build-artifact-retention.md)

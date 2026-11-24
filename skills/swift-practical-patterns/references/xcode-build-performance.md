@@ -1,6 +1,6 @@
 # Xcode build timing, caching, and MCP vs `xcodebuild`
 
-Use this when builds are slow, a no-change build repeats work, enabling a cache appears to regress a clean build, or choosing between Xcode's built-in MCP server and `xcodebuild` for local agent loops versus CI. App runtime traces measure a different problem.
+Use this when builds are slow, a no-change build repeats work, enabling a cache appears to regress a clean build or leaves LLDB breakpoints grey/unresolved, or choosing between Xcode's built-in MCP server and `xcodebuild` for local agent loops versus CI. App runtime traces measure a different problem.
 
 ## Define the build being compared
 
@@ -28,6 +28,21 @@ The [build settings reference](https://developer.apple.com/documentation/xcode/b
 
 Retest clean, no-change, and edited builds independently. A slower first run is not proof of a beneficial warm cache, and a faster no-change build does not establish faster edit builds. Report the measured workloads and correctness checks; do not reuse another project's speedup or promise that caching always helps. Storage cleanup can change the next measurement; see [build-artifact-retention.md](build-artifact-retention.md).
 
+### Fix grey/unresolved breakpoints when cache prefix mapping is enabled
+
+Enabling `COMPILATION_CACHE_ENABLE_CACHING=YES` alone does not rewrite project paths in DWARF debug information. However, when portable or remote-cache setups (such as multi-worktree builds or third-party cache integrations) also enable Swift Build's prefix-mapping settings—`SWIFT_ENABLE_PREFIX_MAPPING` + `SWIFT_ENABLE_PROJECT_PREFIX_MAPPING` and Clang's `CLANG_ENABLE_PREFIX_MAPPING` + `CLANG_ENABLE_PROJECT_PREFIX_MAPPING`—the build system maps `$(PROJECT_DIR)` to the virtual prefix `/^src` (alongside `/^sdk`, `/^toolchain`, `/^xcode`, `/^derived`, and `/^built`). [Swift Build Swift.xcspec](https://github.com/swiftlang/swift-build/blob/main/Sources/SWBUniversalPlatform/Specs/Swift.xcspec), [Swift Build Clang.xcspec](https://github.com/swiftlang/swift-build/blob/main/Sources/SWBUniversalPlatform/Specs/Clang.xcspec)
+
+Because DWARF `DW_AT_name` and `DW_AT_comp_dir` then record `/^src/...`, LLDB cannot match a local file path to the compiled debug info unless a matching source map is configured, leaving breakpoints pending (grey) even though the binary builds and runs normally. Diagnose and resolve this boundary cleanly:
+
+1. **Confirm virtualized paths in debug info:** run `xcrun dwarfdump --debug-info <binary-or-dSYM>` and check whether `DW_AT_name` / `DW_AT_comp_dir` start with `/^src` (or another custom prefix from `SWIFT_OTHER_PREFIX_MAPPINGS` / `CLANG_OTHER_PREFIX_MAPPINGS`), and inspect active LLDB rules with `settings show target.source-map`.
+2. **Map the virtual prefix back to the resolved checkout root in LLDB:** configure `target.source-map` with the actual resolved local `PROJECT_DIR` (avoid symlink mismatches such as `/tmp` vs `/private/tmp`; use `settings append` when additional prefix mappings already exist). [LLDB target.source-map](https://lldb.llvm.org/use/map.html)
+
+```lldb
+settings set target.source-map /^src "/absolute/path/to/project-root"
+```
+
+3. **Scope the source map to the cached scheme or workspace, not `~/.lldbinit`:** in local Xcode 27.2 LLDB checks, configuring `target.source-map /^src <dir>` resolved breakpoints on a prefix-mapped binary (`locations = 1`) **but broke breakpoints (`locations = 0 (pending)`) on a non-prefix-mapped binary built from the same directory**, because LLDB reverse-mapped the local file path to `/^src/...` when binding the breakpoint. Attach the rule via the scheme's LLDB init file (or a workspace-generated `.lldbinit` used only by prefix-mapped builds) rather than adding a single global `/^src` rule in `~/.lldbinit`.
+
 ## Choose between Xcode MCP and `xcodebuild` in local loops
 
 Xcode's MCP bridge (`xcrun mcpbridge`) connects external coding agents to Xcode's build and test tools, and Xcode 27 Beta 5+ adds a preview headless server (`xcrun mcp-server`) that runs without an open workspace window. [External agent setup](https://developer.apple.com/documentation/xcode/giving-external-agents-access-to-xcode), [Xcode 27 release notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-27-release-notes)
@@ -43,11 +58,16 @@ Use these operational boundaries when structuring agent and developer workflows 
 
 ## Evidence and validation limits
 
-Official documentation, Swift Build architecture documentation, and Xcode 27.2 (27B52) command help checked 2026-11-24 on arm64 macOS 27.2. Local CLI checks confirmed `xcodebuild` timing/settings flags, `xcrun mcpbridge --help` (`MCP_XCODE_PID`, `MCP_XCODE_SESSION_ID`), `xcrun mcp-server --help`, `xcrun mcp-server allow-folder --help` (`--always`, `--for-24-hours`), and read-only `xcrun mcp-server status`.
+Official documentation, Swift Build architecture and `.xcspec` definitions, LLDB `target.source-map` documentation, and Xcode 27.2 (27B52) command behavior checked 2026-11-24 on arm64 macOS 27.2:
 
-No app project was benchmarked, no settings or build phases were changed, and no cache hit rate, MCP speedup, tool-switching penalty, or intermittent empty test response was reproduced locally. The workload protocol and MCP-versus-`xcodebuild` workflow guidance are implementation advice; the source articles' numeric timings and hypothesized causes are single-project observations, not verified generalizations.
+- Local CLI checks confirmed `xcodebuild` timing/settings flags, `xcrun mcpbridge --help` (`MCP_XCODE_PID`, `MCP_XCODE_SESSION_ID`), `xcrun mcp-server --help`, `xcrun mcp-server allow-folder --help` (`--always`, `--for-24-hours`), and read-only `xcrun mcp-server status`.
+- Local `Swift.xcspec` and `Clang.xcspec` inside Xcode 27.2 confirmed `SWIFT_ENABLE_PREFIX_MAPPING`, `SWIFT_ENABLE_PROJECT_PREFIX_MAPPING`, `CLANG_ENABLE_PREFIX_MAPPING`, and `CLANG_ENABLE_PROJECT_PREFIX_MAPPING` mapping `$(PROJECT_DIR)` to `/^src` when compilation caching and prefix mapping are enabled.
+- Local `xcodebuild` builds of a minimal Swift executable package (`DEBUG_INFORMATION_FORMAT=dwarf-with-dsym`) confirmed that `COMPILATION_CACHE_ENABLE_CACHING=YES` alone preserved absolute source paths in DWARF, whereas adding `SWIFT_ENABLE_PREFIX_MAPPING=YES` and `SWIFT_ENABLE_PROJECT_PREFIX_MAPPING=YES` rewrote `DW_AT_name` and `DW_AT_comp_dir` to `/^src/...`. In `xcrun lldb`, setting a file/line breakpoint against the local path yielded `locations = 0 (pending)` without a source map and resolved to `locations = 1` with `settings set target.source-map /^src <real-project-dir>`; applying that same `target.source-map` to a non-prefix-mapped binary from the same directory caused its breakpoint to drop to `locations = 0 (pending)`.
+
+No app project was benchmarked, no project build phases were changed, and no cache hit rate, Tuist-generated `.lldbinit` behavior, interactive Xcode GUI debugger session, MCP speedup, tool-switching penalty, or intermittent empty test response was reproduced locally. The workload protocol and MCP-versus-`xcodebuild` workflow guidance are implementation advice; the source articles' numeric timings and hypothesized causes are single-project observations, not verified generalizations.
 
 ## Sources
 
 - [Xcode Build Optimization using 6 Agent Skills](https://www.avanderlee.com/xcode/xcode-build-optimization-using-6-agent-skills/) (2026-03-30; updated 2026-04-16)
 - [Xcode MCP vs xcodebuild: build and test speed compared](https://www.avanderlee.com/ai-development/xcode-mcp-vs-xcodebuild/) (2026-11-23)
+- [Fatbobman's Swift Weekly #162](https://fatbobman.com/en/weekly/issue-162/) (2026-11-16; pointer to Xcode 27 compile-cache `/^src` breakpoint issue, verified independently against Xcode 27.2 / Swift Build specs / LLDB)
