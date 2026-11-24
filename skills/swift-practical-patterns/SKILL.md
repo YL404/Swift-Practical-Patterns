@@ -34,6 +34,7 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 - Testing registered App Intents and entity references out of process, or selecting a UI test target without importing app internals: [app-intents-testing.md](references/app-intents-testing.md)
 - Widget gallery location preferences, carPlay availability, or confusing disfavoredLocations with hiding or privacy enforcement: [widget-placement.md](references/widget-placement.md)
 - Checking whether an OSLog level is enabled before expensive diagnostic work on pre-26.4 OS targets, or avoiding strong-linked Logger.isEnabled(type:) launch crashes: [oslog-availability.md](references/oslog-availability.md)
+- Replacing deprecated URL.path, path(percentEncoded:) defaults and relative-URL OS differences, directory trailing slashes, FilePath(url), or POSIX file-system paths: [file-url-paths.md](references/file-url-paths.md)
 
 ### Swift language and concurrency
 
@@ -65,8 +66,9 @@ Companion guidance to broader Swift and SwiftUI skills, focused on concrete API 
 - Choosing among scrollTransition, visualEffect, onScrollVisibilityChange, onScrollTargetVisibilityChange (idType: label), and clamped onScrollGeometryChange offsets: [scroll-driven-effects.md](references/scroll-driven-effects.md)
 - Sizing cards with containerRelativeFrame, count/span spacing, onGeometryChange breakpoints, or feedback between geometry and state: [container-geometry.md](references/container-geometry.md)
 - Replacing size proposals with fixedSize(), flexible shape ideal-size order, container-level equal-height matching, or unclipped overflow and sibling starvation: [fixed-size.md](references/fixed-size.md)
+- Container layoutPriority(_:) space allocation in HStack/VStack, ZStack and multi-view overlay/background sizing, custom LayoutSubview.priority, or containers that ignore priority: [layout-priority.md](references/layout-priority.md)
 - Aligning a sibling with a nested title, custom AlignmentID fallbacks, active guide selection, or projected alignment values: [alignment-guides.md](references/alignment-guides.md)
-- System container margins, ContentMarginGuide, contentMargins(for:), carousel content insets, or UIKit layoutMarginsGuide: [layout-margins.md](references/layout-margins.md)
+- System container margins, ContentMarginGuide, contentMargins(for:), carousel content insets, or UIKit layoutMarginsGuide and iOS 27.1+ zero UIView default margins: [layout-margins.md](references/layout-margins.md)
 - Circular glass buttons, buttonBorderShape versus clipping, containerShape, concentric corner minima/uniformity, or invalid RoundedCornerStyle.concentric syntax: [control-shapes.md](references/control-shapes.md)
 - Grouping custom glassEffect views, GlassEffectContainer spacing versus glassEffectUnion, glassEffectID, or choosing glassEffectTransition (.matchedGeometry versus .materialize): [glass-containers.md](references/glass-containers.md)
 - Navigation-bar minimization, safe-area reflow versus stable content, or edge-only restoration and its supported combinations: [toolbar-minimization.md](references/toolbar-minimization.md)

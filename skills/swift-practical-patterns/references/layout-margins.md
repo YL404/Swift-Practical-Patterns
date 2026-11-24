@@ -1,8 +1,8 @@
 # System margins and content alignment
 
-Use this guidance when custom SwiftUI content should align with system container margins, a carousel should scroll to the edge while resting at those margins, or UIKit content needs margin-guide constraints. Intentional design spacing is not a bug merely because it differs from system margins.
+Use this guidance when custom SwiftUI content should align with system container margins, a carousel should scroll to the edge while resting at those margins, or UIKit views and subviews rely on `layoutMarginsGuide`—including the iOS 27.1+ change to zero default `UIView` margins. Intentional design spacing is not a bug merely because it differs from system margins.
 
-Official documentation verified 2026-10-22. The SwiftUI guide APIs below require the Xcode 27.1 SDK and iOS/iPadOS 27.1 at runtime; Apple also lists aligned 27.1 releases on other platforms. Examples target iOS. A runtime availability check does not make these declarations available to an older SDK.
+Official documentation verified 2026-11-24. The SwiftUI guide APIs below require the Xcode 27.1 SDK and iOS/iPadOS 27.1 at runtime; Apple also lists aligned 27.1 releases on other platforms. Examples target iOS. A runtime availability check does not make these declarations available to an older SDK.
 
 ## Choose the source and destination of spacing
 
@@ -11,7 +11,7 @@ Official documentation verified 2026-10-22. The SwiftUI guide APIs below require
 | Align content with the margins of its current container | `contentMargins(for: .container, edges: .horizontal)` | 27.1 |
 | Read the current container's margins for drawing or internal scroll insets | `GeometryProxy.contentMargins(for:edges:)` | 27.1 |
 | Set chosen margins on scroll content or indicators | `contentMargins(_:_:for:)` with `ContentMarginPlacement` | 17 |
-| Constrain UIKit content to its view's margins | `UIView.layoutMarginsGuide` | 9 |
+| Constrain UIKit content to its view's margins | `UIView.layoutMarginsGuide` (configure subviews explicitly for iOS 27.1+) | 9 |
 
 `ContentMarginGuide.container` is a **source** of system metrics, not a `ContentMarginPlacement`. Its values depend on the platform, container size, and the view's position inside the container. On iPhone Duo the two sides may differ next to a vertical bar. Do not substitute a constant, mirror one edge to the other, or choose margins by device name. [Container guide](https://developer.apple.com/documentation/swiftui/contentmarginguide/container), [Scroll content margins](https://developer.apple.com/documentation/swiftui/view/contentmargins(_:_:for:))
 
@@ -91,11 +91,20 @@ struct MarginAlignedCarousel: View {
 
 The reader is justified here because the consumer needs numeric insets, not because the layout needs to measure and reapply its safe area. Preserve the two directional values independently when adapting this pattern for custom drawing or a different scrolling container. Multiple scroll-margin modifiers for the same placement override higher ancestors; inspect existing modifiers before adding another one. [Override behavior](https://developer.apple.com/documentation/swiftui/view/contentmargins(_:_:for:))
 
-## UIKit: constrain to the guide, not copied SwiftUI numbers
+## UIKit: constrain to the guide and configure subview margins explicitly
 
-UIKit's margin guide and SwiftUI's container guide serve a similar alignment purpose, but their numeric values are not interchangeable. A view controller's root `layoutMargins` reflects system minimum margins and safe-area insets. Prefer `directionalLayoutMargins` when setting UIKit margins on iOS 11+, and use the guide's leading/trailing anchors for constraints. [UIKit margins](https://developer.apple.com/documentation/uikit/uiview/layoutmargins)
+UIKit's margin guide and SwiftUI's container guide serve a similar alignment purpose, but their numeric values are not interchangeable. A view controller's root `layoutMargins` reflects [`systemMinimumLayoutMargins`](https://developer.apple.com/documentation/uikit/uiviewcontroller/systemminimumlayoutmargins) and safe-area insets. Prefer [`directionalLayoutMargins`](https://developer.apple.com/documentation/uikit/uiview/directionallayoutmargins) when setting UIKit margins on iOS 11+, and use the guide's leading/trailing anchors for constraints. [UIKit margins](https://developer.apple.com/documentation/uikit/uiview/layoutmargins)
 
-This is a complete UIKit view-controller definition, not a bridge required for the SwiftUI examples. It leaves safe-area adjustment and system minimum margins enabled.
+### Do not assume 8-point default margins on non-root `UIView`s (iOS 27.1+)
+
+Starting in iOS 27.1, the default layout margins for a plain `UIView` are **zero** instead of UIKit's historical 8 points, while a view controller's root view continues to receive `systemMinimumLayoutMargins` for its presentation context. [iOS & iPadOS 27.2 Release Notes (186294594)](https://developer.apple.com/documentation/ios-ipados-release-notes/ios-ipados-27_2-release-notes)
+
+Choose the fix based on the subview's geometric role—the two cases are not interchangeable:
+
+- **Edge-aligned container inside the root view** (should align with system margins): set [`preservesSuperviewLayoutMargins`](https://developer.apple.com/documentation/uikit/uiview/preservessuperviewlayoutmargins) to `true`, or constrain content directly to the root view's `layoutMarginsGuide`.
+- **Inset card, custom container, or cell `contentView` needing internal padding around its own `layoutMarginsGuide`:** set `directionalLayoutMargins` explicitly (for example `NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)` or design-system spacing). Setting `preservesSuperviewLayoutMargins = true` does **not** restore internal padding on an inset subview whose edges already lie inside its superview's margins—its margins remain zero once the view default is zero.
+
+This is a complete UIKit view-controller definition, not a bridge required for the SwiftUI examples. It shows the three distinct scopes: root view system margins, an edge-aligned subview inheriting them, and an inset card defining its own directional margins.
 
 ```swift
 import UIKit
@@ -103,17 +112,63 @@ import UIKit
 final class MarginAlignedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        let label = UILabel()
-        label.text = "Aligned with the container margins."
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label)
 
-        let margins = view.layoutMarginsGuide
+        let header = UILabel()
+        header.text = "Aligned with the root view's system margins."
+        header.numberOfLines = 0
+        header.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(header)
+
+        let edgeSection = UIView()
+        edgeSection.preservesSuperviewLayoutMargins = true
+        edgeSection.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(edgeSection)
+
+        let sectionLabel = UILabel()
+        sectionLabel.text = "Inherits root horizontal margins while spanning full width."
+        sectionLabel.numberOfLines = 0
+        sectionLabel.translatesAutoresizingMaskIntoConstraints = false
+        edgeSection.addSubview(sectionLabel)
+
+        let insetCard = UIView()
+        insetCard.directionalLayoutMargins = NSDirectionalEdgeInsets(
+            top: 8, leading: 8, bottom: 8, trailing: 8
+        )
+        insetCard.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(insetCard)
+
+        let cardLabel = UILabel()
+        cardLabel.text = "Inset card sets explicit internal margins."
+        cardLabel.numberOfLines = 0
+        cardLabel.translatesAutoresizingMaskIntoConstraints = false
+        insetCard.addSubview(cardLabel)
+
+        let rootMargins = view.layoutMarginsGuide
+        let sectionMargins = edgeSection.layoutMarginsGuide
+        let cardMargins = insetCard.layoutMarginsGuide
+
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
-            label.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
-            label.topAnchor.constraint(equalTo: margins.topAnchor)
+            header.leadingAnchor.constraint(equalTo: rootMargins.leadingAnchor),
+            header.trailingAnchor.constraint(equalTo: rootMargins.trailingAnchor),
+            header.topAnchor.constraint(equalTo: rootMargins.topAnchor),
+
+            edgeSection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            edgeSection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            edgeSection.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 12),
+
+            sectionLabel.leadingAnchor.constraint(equalTo: sectionMargins.leadingAnchor),
+            sectionLabel.trailingAnchor.constraint(equalTo: sectionMargins.trailingAnchor),
+            sectionLabel.topAnchor.constraint(equalTo: sectionMargins.topAnchor),
+            sectionLabel.bottomAnchor.constraint(equalTo: sectionMargins.bottomAnchor),
+
+            insetCard.leadingAnchor.constraint(equalTo: rootMargins.leadingAnchor),
+            insetCard.trailingAnchor.constraint(equalTo: rootMargins.trailingAnchor),
+            insetCard.topAnchor.constraint(equalTo: edgeSection.bottomAnchor, constant: 12),
+
+            cardLabel.leadingAnchor.constraint(equalTo: cardMargins.leadingAnchor),
+            cardLabel.trailingAnchor.constraint(equalTo: cardMargins.trailingAnchor),
+            cardLabel.topAnchor.constraint(equalTo: cardMargins.topAnchor),
+            cardLabel.bottomAnchor.constraint(equalTo: cardMargins.bottomAnchor),
         ])
     }
 }
@@ -123,25 +178,33 @@ Keep these separate UIKit controls explicit:
 
 - `insetsLayoutMarginsFromSafeArea` defaults to `true`. Setting it to `false` permits margins outside the safe area; it is not a fix for unexpected extra spacing. [Safe-area adjustment](https://developer.apple.com/documentation/uikit/uiview/insetslayoutmarginsfromsafearea)
 - `viewRespectsSystemMinimumLayoutMargins` defaults to `true`. Setting a small `directionalLayoutMargins` value on the root view may still be constrained by the system minimum. Disable the minimum only for an intentional custom design, not just to match one screenshot. [Root-view minimum](https://developer.apple.com/documentation/uikit/uiviewcontroller/viewrespectssystemminimumlayoutmargins)
-- `preservesSuperviewLayoutMargins` defaults to `false`. A nested view has its own margins; opt in when it should also respect its superview's margins. This preserves their boundary, not an unconditional copy of their numeric insets. [Superview margins](https://developer.apple.com/documentation/uikit/uiview/preservessuperviewlayoutmargins)
+- `preservesSuperviewLayoutMargins` defaults to `false`. Opting in cascades the superview's margin boundary adjusted for geometry offsets, not an unconditional copy of numeric insets or a replacement for explicit internal padding on inset views. [Superview margins](https://developer.apple.com/documentation/uikit/uiview/preservessuperviewlayoutmargins)
 
 ## Check the layout, not a device-specific number
 
 Inspect navigation-title alignment, both ends of horizontal scrolling, rotation, a right-to-left language, and nested padding. On Duo include outer/inner displays and the side next to a vertical bar. Keep the viewport, safe area, and content margins distinguishable when diagnosing an offset. Exercise larger text sizes separately; fixed-height sample cards are not a production Dynamic Type strategy.
 
-The source article's exact point measurements and nested-reader values are simulator observations under its reported iOS 27.2 conditions (Duo: iOS 27.1), not constants or universal API guarantees. A zero margin must not be interpreted as a missing safe area, and an older-system padding fallback must not be described as identical alignment.
+Audit existing UIKit `layoutMarginsGuide` and `layoutMargins` references on non-root subviews and verify them on the iPhone Duo simulator or physical iOS 27.1+ hardware—do not assume a standard iPhone simulator alone reproduces the zero-default change if its simulator runtime still uses legacy 8-point defaults.
+
+The source articles' exact point measurements and nested-reader values are simulator observations under their reported iOS 27.1/27.2 conditions, not constants or universal API guarantees. A zero margin must not be interpreted as a missing safe area, and an older-system padding fallback must not be described as identical alignment.
 
 The API decisions above use the linked Apple contracts; numeric comparisons from the articles are not adopted as layout rules.
 
 ## Verification and remaining boundaries
 
-The three code blocks were extracted verbatim and passed `swiftc -typecheck -swift-version 6 -strict-concurrency=complete` with Xcode 27.1 (27A9275), Apple Swift 6.4, the iPhoneOS 27.1 SDK, and an arm64 iOS 16.0 deployment target. New declarations remain availability-gated; the UIKit example does not require a SwiftUI bridge in production.
+On 2026-11-24, all three code blocks above were extracted verbatim and passed `swiftc -typecheck` with Xcode 27.2 (27B52), Apple Swift 6.4.2 (swiftlang-6.4.2.1.9), the `iPhoneOS27.2.sdk`, and an arm64 iOS 16.0 deployment target under Swift 6 (`nonisolated` and `MainActor` default isolation) and Swift 5 (`nonisolated` default isolation), with complete strict concurrency and warnings as errors. New SwiftUI declarations remain availability-gated; the UIKit example does not require a SwiftUI bridge in production.
 
-A temporary native host then displayed the paragraph, initial carousel layout, and UIKit label on the iOS 27.1 iPhone Duo simulator's outer display in portrait. Its linked simulator SDK was verified as 27.1. Screenshots showed aligned readable content and the system's side status region. A separate geometry probe in that setup read leading/trailing margins of 20/0 at its root, 12/0 after 8 points of horizontal padding, and 0/0 after applying the guide; these are observations of those positions, not layout constants.
+Earlier (2026-10-22), a temporary native host displayed the SwiftUI paragraph, initial carousel layout, and root-view UIKit label on the iOS 27.1 iPhone Duo simulator's outer display in portrait (linked simulator SDK 27.1). Screenshots showed aligned readable content and the system's side status region. A separate geometry probe in that setup read leading/trailing margins of 20/0 at its root, 12/0 after 8 points of horizontal padding, and 0/0 after applying the guide; these are observations of those positions, not layout constants.
 
-Carousel scrolling to the final item, rotation, inner-display and partially folded layouts, right-to-left layout, accessibility settings, physical devices, other Apple platforms, and execution of the older-system branch were not verified. The checks above do not establish those behaviors.
+On 2026-11-24, UIKit default-margin probes built with Xcode 27.2 (`iphonesimulator` 27.2 SDK) across deployment targets `16.0`, `27.1`, and `27.2` were executed on local simulators:
+
+- On **iPhone Duo (iOS 27.2 simulator runtime `24B91016s`, `SimRuntime.iOS-27-2-iPhone19-4`)**, across all three deployment targets: standalone `UIView()`, `UITableViewCell().contentView`, `UICollectionViewCell().contentView`, an edge-pinned subview with `preservesSuperviewLayoutMargins = false`, and a 30pt-inset subview with `preservesSuperviewLayoutMargins = true` all reported `directionalLayoutMargins` of `(0, 0, 0, 0)`. Meanwhile `vc.systemMinimumLayoutMargins` stayed `(0, 16, 0, 16)`, the edge-pinned subview with `preservesSuperviewLayoutMargins = true` inherited `(0, 16, 0, 16)`, and the 30pt-inset subview with explicit 8pt margins kept `(8, 8, 8, 8)`.
+- On **iPhone 18 Pro (iOS 27.2 simulator runtime `24B8117`, `SimRuntime.iOS-27-2`)** (both via `simctl spawn` across targets `16.0`/`27.1`/`27.2` and in a full `UIScene` app targeting `27.2`) and **iPhone 18 Pro (iOS 27.0 simulator runtime `24A434`)**: standalone `UIView()`, cell `contentView`s, and the 30pt-inset subview still reported `(8, 8, 8, 8)` defaults while `edgePreserve` inherited `16` horizontally—demonstrating why standard non-Duo simulator runs in Xcode 27.2 can hide the zero-default change.
+
+Carousel scrolling to the final item, rotation, inner-display and partially folded layouts, right-to-left layout, accessibility settings, physical iOS 27.1/27.2 devices (both Duo and non-Duo), other Apple platforms, and execution of the older-system SwiftUI branch were not verified. The checks above do not establish those behaviors.
 
 ## Sources
 
 - [How to use layoutMarginsGuide in SwiftUI](https://sarunw.com/posts/swiftui-content-margin-guide/)
 - [How to use layoutMarginsGuide in UIKit](https://sarunw.com/posts/uikit-layoutmarginsguide/)
+- [iOS Code Review Issue #93](https://ioscodereview.com/issues/issue-93-ios-27-2-is-out-uiview-margins-went-to-zero-and-the-duo-is-in-peoples-hands/)
